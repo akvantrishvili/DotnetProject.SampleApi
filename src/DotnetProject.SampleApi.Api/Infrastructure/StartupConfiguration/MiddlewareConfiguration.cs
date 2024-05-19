@@ -1,4 +1,4 @@
-﻿using Amazon.Runtime.Internal;
+﻿using DotnetProject.SampleApi.Api.Infrastructure.ErrorHandling;
 using DotnetProject.SampleApi.Persistence.Database;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
@@ -25,12 +25,7 @@ namespace DotnetProject.SampleApi.Api.Infrastructure.StartupConfiguration
             // See details here: https://docs.microsoft.com/en-us/aspnet/core/fundamentals/localization
             app.UseRequestLocalization();
 
-            // Register exception handler middleware with error code descriptions.
-            // See details here: https://confluence.tbcbank.ge/display/SD/API+Error+Handling
-            //app.UseApiErrorHandling()
-            //    .AddExceptionHandler<ExceptionHandler>()
-            //    .AddErrorCodeDescriptions(DomainErrorCodes.GetErrorCodeDescriptions)
-            //    .AddErrorCodeDescriptions(ApplicationErrorCodes.GetErrorCodeDescriptions);
+            app.UseExceptionHandler();
 
             app.UseVersionedSwagger();
 

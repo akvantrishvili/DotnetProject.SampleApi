@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Threading;
 using System.Threading.Tasks;
-using Asp.Versioning;
 using DotnetProject.SampleApi.Application.Common;
 using DotnetProject.SampleApi.Application.Customers.Queries;
 using DotnetProject.SampleApi.Domain.Customers;
@@ -28,7 +27,6 @@ namespace DotnetProject.SampleApi.Api.Controllers
         /// <response code="201" example="1">Customer identifier</response>
         [HttpPost]
         [ProducesResponseType(typeof(long), StatusCodes.Status201Created)]
-        //[ProducesErrorCode("ObjectAlreadyExists", StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<long>> CreateCustomer([Required, FromBody] CreateCustomerCommand command,
             CancellationToken cancellationToken)
         {
@@ -51,7 +49,7 @@ namespace DotnetProject.SampleApi.Api.Controllers
             [Required, FromBody] AddIdentityDocumentCommand command, CancellationToken cancellationToken)
         {
             command.CustomerId = customerId;
-            await mediator.Send(command, cancellationToken);
+            await mediator.Send(command, cancellationToken).ConfigureAwait(false);
             return Ok();
         }
 
@@ -71,7 +69,7 @@ namespace DotnetProject.SampleApi.Api.Controllers
             {
                 CustomerId = customerId,
                 IdentityDocumentId = documentId
-            }, cancellationToken);
+            }, cancellationToken).ConfigureAwait(false);
             return Ok();
         }
 
@@ -89,7 +87,7 @@ namespace DotnetProject.SampleApi.Api.Controllers
             CancellationToken cancellationToken)
         {
             command.CustomerId = customerId;
-            await mediator.Send(command, cancellationToken);
+            await mediator.Send(command, cancellationToken).ConfigureAwait(false);
             return Ok();
         }
 
@@ -107,7 +105,7 @@ namespace DotnetProject.SampleApi.Api.Controllers
             CancellationToken cancellationToken)
         {
             command.CustomerId = customerId;
-            await mediator.Send(command, cancellationToken);
+            await mediator.Send(command, cancellationToken).ConfigureAwait(false);
             return Ok();
         }
 
@@ -125,7 +123,7 @@ namespace DotnetProject.SampleApi.Api.Controllers
             await mediator.Send(new CloseCustomerCommand
             {
                 CustomerId = customerId
-            }, cancellationToken);
+            }, cancellationToken).ConfigureAwait(false);
             return Ok();
         }
 
@@ -143,7 +141,7 @@ namespace DotnetProject.SampleApi.Api.Controllers
             return Ok(await mediator.Send(new GetCustomerByIdQuery
             {
                 Id = customerId
-            }, cancellationToken));
+            }, cancellationToken).ConfigureAwait(false));
         }
 
         /// <summary>
@@ -175,7 +173,7 @@ namespace DotnetProject.SampleApi.Api.Controllers
                 LastName = lastName,
                 Status = customerStatus,
                 IdNumber = idNumber
-            }, cancellationToken);
+            }, cancellationToken).ConfigureAwait(false);
             return Ok(result);
         }
     }

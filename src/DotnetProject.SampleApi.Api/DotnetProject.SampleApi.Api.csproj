@@ -19,7 +19,6 @@
 
 	<ItemGroup>
 		<PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.0" />
-		<PackageReference Include="AspNetCore.HealthChecks.Aws.S3" Version="8.0.*" />
 		<PackageReference Include="Serilog.Settings.Configuration" Version="8.0.0" />
 		<PackageReference Include="Serilog.Sinks.Console" Version="5.0.1" />
 		<PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="8.0.*" />

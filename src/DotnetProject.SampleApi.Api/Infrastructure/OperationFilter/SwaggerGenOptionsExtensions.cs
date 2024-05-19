@@ -1,6 +1,4 @@
-﻿// Copyright (C) TBC Bank. All Rights Reserved.
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Reflection;
 using Swashbuckle.AspNetCore.SwaggerGen;
 

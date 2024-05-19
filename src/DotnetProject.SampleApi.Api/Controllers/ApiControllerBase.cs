@@ -5,11 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace DotnetProject.SampleApi.Api.Controllers
 {
     [ApiController]
-    //[ProducesErrorCode(nameof(DefaultErrorCodes.SystemError), StatusCodes.Status500InternalServerError)]
-    //[ProducesErrorCode(nameof(DefaultErrorCodes.ValidationError), StatusCodes.Status400BadRequest)]
-    //[ProducesErrorCode("ApplicationError", StatusCodes.Status500InternalServerError)]
-    //[ProducesErrorCode("DomainError", StatusCodes.Status400BadRequest)]
-    //[ProducesErrorCode("ObjectNotFound", StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public class ApiControllerBase : ControllerBase
     {
     }
