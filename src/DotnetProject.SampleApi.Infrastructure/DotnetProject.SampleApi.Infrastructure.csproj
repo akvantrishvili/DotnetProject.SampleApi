@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	  <TargetFramework>net8.0</TargetFramework>
+  </PropertyGroup>
+
+	<ItemGroup>
+		<InternalsVisibleTo Include="$(AssemblyName).UnitTests" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\DotnetProject.SampleApi.Application\DotnetProject.SampleApi.Application.csproj" />
+	</ItemGroup>
+
+</Project>

@@ -1,0 +1,121 @@
+<Project>
+
+    <PropertyGroup>
+	    <Nullable>enable</Nullable>
+	    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+	    <NoWarn>$(NoWarn);1591</NoWarn>
+	    <AnalysisLevel>latest</AnalysisLevel>
+
+        <!--
+          The compiler will accept syntax of the latest released version of the C# language (including minor version)
+          provided by the currently selected .NET SDK (in global.json).
+
+          https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/compiler-options/language#langversion
+          -->
+        <LangVersion>latest</LangVersion>
+
+        <!--
+          Use the faster NuGet package restore algorithm.
+          This value will be `true` by default in upcoming NuGet releases.
+
+          https://github.com/NuGet/Home/issues/8791
+          -->
+        <RestoreUseStaticGraphEvaluation>true</RestoreUseStaticGraphEvaluation>
+
+        <!--
+          Prevent Visual Studio IncrementalClean from deleting transitively-acquired content.
+          This is an unexpected behavior and is different from what dotnet.exe build does.
+          This value will be `true` by default in upcoming MSBuild versions.
+
+          https://github.com/dotnet/msbuild/issues/1054#issuecomment-847959047
+          -->
+        <MSBuildCopyContentTransitively>true</MSBuildCopyContentTransitively>
+
+        <!--
+          Enable the C# compiler strict mode. This (poorly documented) mode enables additional warnings for
+          incorrect usages of some features. For instance, this will warn when using the == operator to
+          compare a struct with a null literal.
+
+          https://www.meziantou.net/csharp-compiler-strict-mode.htm
+          -->
+        <Features>strict</Features>
+
+        <!--
+          Accelerate .NET SDK style project builds (starting from Visual Studio v17.5).
+          Generally, it must be `true` and works in most cases.
+          Set to `false` only after you have reviewed the documentation and felt the need.
+
+          https://github.com/dotnet/project-system/blob/main/docs/build-acceleration.md
+          -->
+        <AccelerateBuildsInVisualStudio>true</AccelerateBuildsInVisualStudio>
+
+        <!--
+          Reference assemblies are a special type of assembly that contain only the minimum amount of metadata
+          required to represent the library's public API surface. They include declarations for all members
+          that are significant when referencing an assembly in build tools, but exclude all member implementations
+          and declarations of private members that have no observable impact on their API contract. In contrast,
+          regular assemblies are called implementation assemblies.
+
+          IDEs and build tools also can take advantage of reference assemblies to reduce build times in case
+          of large solutions consisting of multiple class libraries. Usually, in incremental build scenarios
+          a project is rebuilt when any of its input files are changed, including the assemblies it depends on.
+          The implementation assembly changes whenever the programmer changes the implementation of any member.
+          The reference assembly only changes when its public API is affected. So, using the reference assembly
+          as an input file instead of the implementation assembly allows skipping the build of the dependent
+          project in some cases.
+
+          The default value is `true` anyway, except in .NET Standard projects; make it `true` for all.
+
+          https://learn.microsoft.com/en-us/dotnet/standard/assembly/reference-assemblies
+          -->
+        <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+
+        <!--
+          Causes the compiler to produce an assembly whose byte-for-byte output is identical
+          across subsequent compilations for identical inputs. Same sources -> same binaries.
+
+          We don't care about deterministic builds on developer's machine; set to `true` only in CI/CD.
+
+          https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/compiler-options/code-generation#deterministic
+          -->
+        <Deterministic>false</Deterministic>
+
+    </PropertyGroup>
+
+    <!--
+      When building inside Azure Pipelines agent
+      -->
+    <PropertyGroup Condition=" '$(TF_BUILD)' == 'True' ">
+
+        <!--
+          Causes the compiler to produce an assembly whose byte-for-byte output is identical
+          across subsequent compilations for identical inputs. Same sources -> same binaries.
+
+          https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/compiler-options/code-generation#deterministic
+          -->
+        <Deterministic>true</Deterministic>
+
+        <!--
+          Look only at package sources listed in the project-level nuget.config.
+          Customizations in global nuget.config on build agents are not always correct.
+          Ignore them and rely exclusively on nuget.config that is part of your project.
+
+          https://github.com/dotnet/reproducible-builds/blob/main/Documentation/Reproducible-MSBuild/Techniques/DisableImplicitNuGetFallbackFolder.md
+          -->
+        <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
+
+    </PropertyGroup>
+	
+	<Target Name="SetAssemblyVersion" AfterTargets="MinVer">
+		<PropertyGroup>
+			<AssemblyVersion>$(MinVerMajor).$(MinVerMinor).$(MinVerPatch).0</AssemblyVersion>
+		</PropertyGroup>
+	</Target>
+
+    <!--
+        Include Local.Build.props file that contains settings specific to developer's machine (if exists).
+        Local.build.props must be excluded from source control in .gitignore
+    -->
+    <Import Project="$(MSBuildThisFileDirectory)Local.Build.props" Condition="Exists('$(MSBuildThisFileDirectory)Local.Build.props')" />
+
+</Project>
