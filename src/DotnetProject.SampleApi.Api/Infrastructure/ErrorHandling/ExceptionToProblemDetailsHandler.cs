@@ -1,6 +1,7 @@
 ﻿// Copyright (C) TBC Bank. All Rights Reserved.
 
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using DotnetProject.SampleApi.Application.Exceptions;
@@ -23,18 +24,15 @@ namespace DotnetProject.SampleApi.Api.Infrastructure.ErrorHandling
         public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception,
             CancellationToken cancellationToken)
         {
-            _logger.LogError(
-                exception, "Exception occurred: {Message}", exception.Message);
-
             switch (exception)
             {
-               
                 case ObjectNotFoundException objectNotFoundException:
+                    _logger.LogInformation(exception, "Exception occurred: {Message}", exception.Message);
                     httpContext.Response.StatusCode = StatusCodes.Status404NotFound;
                     httpContext.Response.ContentType = "application/problem+json";
                     await httpContext.Response.WriteAsJsonAsync(new
                     {
-                        title = objectNotFoundException.Message,
+                        title = objectNotFoundException.Title,
                         status = StatusCodes.Status404NotFound,
                         detail = objectNotFoundException.Message,
                         code = objectNotFoundException.Code,
@@ -43,11 +41,12 @@ namespace DotnetProject.SampleApi.Api.Infrastructure.ErrorHandling
                     }, cancellationToken).ConfigureAwait(true);
                     break;
                 case ObjectAlreadyExistsException objectAlreadyExistsException:
+                    _logger.LogInformation(exception, "Exception occurred: {Message}", exception.Message);
                     httpContext.Response.StatusCode = StatusCodes.Status409Conflict;
                     httpContext.Response.ContentType = "application/problem+json";
                     await httpContext.Response.WriteAsJsonAsync(new
                     {
-                        title = objectAlreadyExistsException.Message,
+                        title = objectAlreadyExistsException.Title,
                         status = StatusCodes.Status409Conflict,
                         detail = objectAlreadyExistsException.Message,
                         code = objectAlreadyExistsException.Code,
@@ -56,39 +55,47 @@ namespace DotnetProject.SampleApi.Api.Infrastructure.ErrorHandling
                     }, cancellationToken).ConfigureAwait(true);
                     break;
                 case Application.Exceptions.ApplicationException applicationException:
+                    _logger.LogError(exception, "Exception occurred: {Message}", exception.Message);
                     httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
                     httpContext.Response.ContentType = "application/problem+json";
                     await httpContext.Response.WriteAsJsonAsync(new
                     {
-                        title = applicationException.Message,
+                        title = applicationException.Title,
                         status = StatusCodes.Status400BadRequest,
                         detail = applicationException.Message,
                         code = applicationException.Code
                     }, cancellationToken).ConfigureAwait(false);
                     break;
                 case DomainException domainException:
+                    _logger.LogError(exception, "Exception occurred: {Message}", exception.Message);
                     httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
                     httpContext.Response.ContentType = "application/problem+json";
                     await httpContext.Response.WriteAsJsonAsync(new
                     {
-                        title = domainException.Message,
+                        title = domainException.Title,
                         status = StatusCodes.Status400BadRequest,
                         detail = domainException.Message,
-                        code = domainException.Code
+                        code = domainException.Code,
                     }, cancellationToken).ConfigureAwait(true);
                     break;
-                case FluentValidation.ValidationException:
+                case FluentValidation.ValidationException validationException:
                     httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
                     httpContext.Response.ContentType = "application/problem+json";
+                    var errors = validationException.Errors.GroupBy(x => x.PropertyName ?? string.Empty)
+                        .ToDictionary(x => x.Key,
+                            y => y.Select(z => z.ErrorMessage).ToArray())!;
+
                     await httpContext.Response.WriteAsJsonAsync(new
                     {
-                        title = "Validation error occurred",
+                        title = validationException.Message,
                         status = StatusCodes.Status400BadRequest,
                         detail = "Validation error occurred",
-                        code = "ValidationError"
+                        code = "ValidationError",
+                        Errors = errors
                     }, cancellationToken).ConfigureAwait(true);
                     break;
                 default:
+                    _logger.LogError(exception, "Exception occurred: {Message}", exception.Message);
                     httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
                     httpContext.Response.ContentType = "application/problem+json";
                     await httpContext.Response.WriteAsJsonAsync(new

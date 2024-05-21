@@ -32,7 +32,7 @@ namespace DotnetProject.SampleApi.Api.Infrastructure.StartupConfiguration
         {
             builder.Services.AddPersistence(builder.Configuration.GetConnectionString("Database") ?? throw new InvalidOperationException("Database connection string not configured"));
             builder.Services.AddInfrastructure();
-            builder.Services.AddApplication(typeof(Program).Assembly);
+            builder.Services.AddApplication();
 
 
             #region API and Validations
@@ -54,11 +54,10 @@ namespace DotnetProject.SampleApi.Api.Infrastructure.StartupConfiguration
             builder.Services.Configure<ApiBehaviorOptions>(options =>
             {
                 options.SuppressModelStateInvalidFilter = true;
-                options.SuppressMapClientErrors = true;
+                //options.SuppressMapClientErrors = true;
             });
 
-            builder.Services.AddValidatorsFromAssemblyContaining<Domain.Customers.Customer>();
-            builder.Services.AddValidatorsFromAssemblyContaining<Application.Exceptions.ApplicationException>();
+            builder.Services.AddValidatorsFromAssembly(typeof(Domain.Customers.Customer).Assembly);
             builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
             // See details here: https://confluence.tbcbank.ge/display/SD/API+Error+Handling
@@ -131,7 +130,6 @@ namespace DotnetProject.SampleApi.Api.Infrastructure.StartupConfiguration
                 options.ExampleFilters();
                 options.DocumentFilter<HealthCheckDocumentFilter>("/health");
                 options.CustomOperationIds(x => null);
-                //options.AddErrorCodeDescriptions();
 
             });
             builder.Services.AddFluentValidationRulesToSwagger();
