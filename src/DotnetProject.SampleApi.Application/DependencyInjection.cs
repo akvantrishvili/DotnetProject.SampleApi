@@ -1,7 +1,6 @@
 ﻿
 using System.Reflection;
 using DotnetProject.SampleApi.Application.Behaviors;
-using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DotnetProject.SampleApi.Application
@@ -19,10 +18,9 @@ namespace DotnetProject.SampleApi.Application
         /// <returns>Service collection with registered necessary types</returns>
         public static IServiceCollection AddApplication(this IServiceCollection services, Assembly? assembly = null)
         {
-            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
             services.AddMediatR(t =>
             {
-                t.RegisterServicesFromAssemblies(assembly == null ? typeof(DependencyInjection).Assembly: assembly, typeof(DependencyInjection).Assembly);
+                t.RegisterServicesFromAssemblies(typeof(DependencyInjection).Assembly);
                 t.AddOpenBehavior(typeof(ValidationBehavior<,>));
             });
             return services;

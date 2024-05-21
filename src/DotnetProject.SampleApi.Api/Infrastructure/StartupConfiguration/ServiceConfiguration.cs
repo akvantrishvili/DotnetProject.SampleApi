@@ -1,6 +1,4 @@
-﻿
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -10,6 +8,7 @@ using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using Asp.Versioning;
 using Asp.Versioning.Conventions;
+using DotnetProject.SampleApi.Api.Infrastructure.ErrorHandling;
 using DotnetProject.SampleApi.Api.Infrastructure.OperationFilter;
 using DotnetProject.SampleApi.Application;
 using DotnetProject.SampleApi.Infrastructure;
@@ -33,7 +32,7 @@ namespace DotnetProject.SampleApi.Api.Infrastructure.StartupConfiguration
         {
             builder.Services.AddPersistence(builder.Configuration.GetConnectionString("Database") ?? throw new InvalidOperationException("Database connection string not configured"));
             builder.Services.AddInfrastructure();
-            builder.Services.AddApplication(typeof(Program).Assembly);
+            builder.Services.AddApplication();
 
 
             #region API and Validations
@@ -44,14 +43,21 @@ namespace DotnetProject.SampleApi.Api.Infrastructure.StartupConfiguration
                 options.Filters.Add(new ConsumesAttribute("application/json"));
             }).AddJsonOptions(options => options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
+            builder.Services.AddProblemDetails(options => options.CustomizeProblemDetails = (contex) =>
+            {
+                contex.ProblemDetails.Extensions.Add("nodeId", Environment.MachineName);
+            });
+
+            builder.Services.AddExceptionHandler<ExceptionToProblemDetailsHandler>();
+
             //Disable automatic data annotation validations, because we are using fluent validations and MediatR validation pipeline behaviour.
             builder.Services.Configure<ApiBehaviorOptions>(options =>
             {
                 options.SuppressModelStateInvalidFilter = true;
+                //options.SuppressMapClientErrors = true;
             });
 
-            builder.Services.AddValidatorsFromAssemblyContaining<Domain.Customers.Customer>();
-            builder.Services.AddValidatorsFromAssemblyContaining<Application.Exceptions.ApplicationException>();
+            builder.Services.AddValidatorsFromAssembly(typeof(Domain.Customers.Customer).Assembly);
             builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
             // See details here: https://confluence.tbcbank.ge/display/SD/API+Error+Handling
@@ -123,9 +129,7 @@ namespace DotnetProject.SampleApi.Api.Infrastructure.StartupConfiguration
                 });
                 options.ExampleFilters();
                 options.DocumentFilter<HealthCheckDocumentFilter>("/health");
-                //options.CustomOperationIds(x => null);
-                //options.AddErrorCodeDescriptions();
-                //options.OperationFilter<SwaggerDefaultValues>();
+                options.CustomOperationIds(x => null);
 
             });
             builder.Services.AddFluentValidationRulesToSwagger();
