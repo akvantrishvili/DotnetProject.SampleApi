@@ -13,7 +13,6 @@ Log.Logger = new LoggerConfiguration()
 
 try
 {
-    
     Log.Information("Starting host");
 
     var builder = WebApplication.CreateBuilder(args);

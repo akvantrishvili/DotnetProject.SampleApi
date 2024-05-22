@@ -1,11 +1,11 @@
-﻿
-using System;
+﻿using System;
 using DotnetProject.SampleApi.Application.Contracts;
-using DotnetProject.SampleApi.Persistence.Database;
-using DotnetProject.SampleApi.Persistence.Repositories;
+using DotnetProject.SampleApi.PersistenceMsSql.Database;
+using DotnetProject.SampleApi.PersistenceMsSql.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-namespace DotnetProject.SampleApi.Persistence
+
+namespace DotnetProject.SampleApi.PersistenceMsSql
 {
     public static class DependencyInjection
     {

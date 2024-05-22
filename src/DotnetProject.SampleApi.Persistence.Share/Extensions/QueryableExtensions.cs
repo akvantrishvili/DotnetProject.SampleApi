@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Concurrent;
 using System.Linq.Expressions;
 using System.Reflection;
 using DotnetProject.SampleApi.Application.Common;
 using Microsoft.EntityFrameworkCore;
 
-namespace DotnetProject.SampleApi.Persistence.Extensions
+namespace DotnetProject.SampleApi.Persistence.Share.Extensions
 {
     public static class QueryableExtensions
     {

@@ -10,8 +10,4 @@
 		<PackageReference Include="System.ComponentModel.Annotations" Version="5.*" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<InternalsVisibleTo Include="$(AssemblyName).UnitTests" />
-	</ItemGroup>
-
 </Project>

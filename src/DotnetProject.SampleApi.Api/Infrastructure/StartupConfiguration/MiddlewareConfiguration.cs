@@ -1,5 +1,5 @@
-﻿using DotnetProject.SampleApi.Api.Infrastructure.ErrorHandling;
-using DotnetProject.SampleApi.Persistence.Database;
+﻿using System;
+using DotnetProject.SampleApi.PersistencePostgre.Database;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
