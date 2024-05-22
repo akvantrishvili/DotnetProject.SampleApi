@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using DotnetProject.SampleApi.Application.Common;
+﻿using DotnetProject.SampleApi.Application.Common;
 using Microsoft.EntityFrameworkCore;
 
-namespace DotnetProject.SampleApi.Persistence.Repositories
+namespace DotnetProject.SampleApi.Persistence.Share.Repositories
 {
     public abstract class BaseRepository<TDbContext, TEntity>(TDbContext context)
         where TEntity : class

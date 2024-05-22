@@ -12,8 +12,8 @@ using DotnetProject.SampleApi.Api.Infrastructure.ErrorHandling;
 using DotnetProject.SampleApi.Api.Infrastructure.OperationFilter;
 using DotnetProject.SampleApi.Application;
 using DotnetProject.SampleApi.Infrastructure;
-using DotnetProject.SampleApi.Persistence;
-using DotnetProject.SampleApi.Persistence.Database;
+using DotnetProject.SampleApi.PersistencePostgre;
+using DotnetProject.SampleApi.PersistencePostgre.Database;
 using FluentValidation;
 using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
@@ -30,7 +30,8 @@ namespace DotnetProject.SampleApi.Api.Infrastructure.StartupConfiguration
     {
         public static WebApplicationBuilder ConfigureServices(this WebApplicationBuilder builder)
         {
-            builder.Services.AddPersistence(builder.Configuration.GetConnectionString("Database") ?? throw new InvalidOperationException("Database connection string not configured"));
+            //builder.Services.AddPersistence(builder.Configuration.GetConnectionString("Database") ?? throw new InvalidOperationException("Database connection string not configured"));
+            builder.Services.AddPersistencePostgre(builder.Configuration.GetConnectionString("postgresqlDatabase") ?? throw new InvalidOperationException("Database connection string not configured"));
             builder.Services.AddInfrastructure();
             builder.Services.AddApplication();
 
@@ -138,6 +139,7 @@ namespace DotnetProject.SampleApi.Api.Infrastructure.StartupConfiguration
             #endregion API Versioning
 
             #region Health checks
+
 
             builder.Services.AddHealthChecks()
                 .AddDbContextCheck<AppDbContext>("Database");

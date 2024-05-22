@@ -19,7 +19,6 @@
 
 	<ItemGroup>
 		<PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
 		<PackageReference Include="Serilog.Settings.Configuration" Version="8.0.0" />
 		<PackageReference Include="Serilog.Sinks.Console" Version="5.0.1" />
 		<PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="8.0.*" />
@@ -30,7 +29,6 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.*" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.*" />
 		<PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="8.0.*" />
 		<PackageReference Include="Serilog.AspNetCore" Version="8.0.*" />
 		<PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.6.1" />
@@ -44,7 +42,7 @@
 	  <ProjectReference Include="..\DotnetProject.SampleApi.Application\DotnetProject.SampleApi.Application.csproj" />
 	  <ProjectReference Include="..\DotnetProject.SampleApi.Domain\DotnetProject.SampleApi.Domain.csproj" />
 	  <ProjectReference Include="..\DotnetProject.SampleApi.Infrastructure\DotnetProject.SampleApi.Infrastructure.csproj" />
-	  <ProjectReference Include="..\DotnetProject.SampleApi.Persistence\DotnetProject.SampleApi.Persistence.csproj" />
+	  <ProjectReference Include="..\DotnetProject.SampleApi.PersistencePostgre\DotnetProject.SampleApi.PersistencePostgre.csproj" />
 	</ItemGroup>
 
 </Project>

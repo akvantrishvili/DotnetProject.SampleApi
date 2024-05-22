@@ -1,12 +1,11 @@
-﻿
-
-using DotnetProject.SampleApi.Domain.Customers;
+﻿using DotnetProject.SampleApi.Domain.Customers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace DotnetProject.SampleApi.Persistence.Database.Configurations
+namespace DotnetProject.SampleApi.Persistence.Share.Database.Configurations
 {
-    public class CustomerConfiguration : IEntityTypeConfiguration<Customer>
+    public class CustomerConfiguration :
+        IEntityTypeConfiguration<Customer>
     {
         public void Configure(EntityTypeBuilder<Customer> builder)
         {

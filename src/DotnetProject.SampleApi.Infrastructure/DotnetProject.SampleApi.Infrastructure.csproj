@@ -5,10 +5,6 @@
   </PropertyGroup>
 
 	<ItemGroup>
-		<InternalsVisibleTo Include="$(AssemblyName).UnitTests" />
-	</ItemGroup>
-
-	<ItemGroup>
 	  <ProjectReference Include="..\DotnetProject.SampleApi.Application\DotnetProject.SampleApi.Application.csproj" />
 	</ItemGroup>
 

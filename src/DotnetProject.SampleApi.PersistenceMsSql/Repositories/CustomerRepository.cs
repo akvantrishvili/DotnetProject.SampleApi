@@ -1,7 +1,4 @@
-﻿
-
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
@@ -9,12 +6,12 @@ using System.Threading.Tasks;
 using DotnetProject.SampleApi.Application.Common;
 using DotnetProject.SampleApi.Application.Contracts;
 using DotnetProject.SampleApi.Domain.Customers;
-using DotnetProject.SampleApi.Persistence.Database;
-using DotnetProject.SampleApi.Persistence.Extensions;
+using DotnetProject.SampleApi.Persistence.Share.Extensions;
+using DotnetProject.SampleApi.Persistence.Share.Repositories;
+using DotnetProject.SampleApi.PersistenceMsSql.Database;
 using Microsoft.EntityFrameworkCore;
 
-
-namespace DotnetProject.SampleApi.Persistence.Repositories
+namespace DotnetProject.SampleApi.PersistenceMsSql.Repositories
 {
     public class CustomerRepository(AppDbContext context)
         : BaseRepository<AppDbContext, Customer>(context), ICustomerRepository

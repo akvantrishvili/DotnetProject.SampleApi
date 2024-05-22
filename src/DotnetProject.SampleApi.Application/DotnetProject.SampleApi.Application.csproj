@@ -10,10 +10,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<InternalsVisibleTo Include="$(AssemblyName).UnitTests" />
-	</ItemGroup>
-
-	<ItemGroup>
 	  <ProjectReference Include="..\DotnetProject.SampleApi.Domain\DotnetProject.SampleApi.Domain.csproj" />
 	</ItemGroup>
 
