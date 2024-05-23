@@ -18,7 +18,7 @@ namespace DotnetProject.SampleApi.PersistencePostgre
             if (string.IsNullOrWhiteSpace(databaseConnectionString))
                 throw new ArgumentNullException(nameof(databaseConnectionString));
 
-            services.AddEntityFrameworkNpgsql().AddDbContext<AppDbContext>(options => options.UseNpgsql(databaseConnectionString));
+            services.AddDbContext<AppDbContext>(options => options.UseNpgsql(databaseConnectionString));
             services.AddScoped<ICustomerRepository, CustomerRepository>();
             return services;
         }

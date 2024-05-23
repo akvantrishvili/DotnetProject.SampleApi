@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  db:
+    image: postgres
+    restart: always
+    container_name: postgresdb
+    shm_size: 128mb
+    environment:
+      pgdata: /var/lib/postgresql/data/pgdata
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123
+      postgres_db: postgres
+    ports:
+      - 5433:5432
+    volumes: 
+      - pgdata:/var/lib/postgresql/data
+
+  adminer:
+    image: adminer
+    restart: always
+    depends_on: 
+      - db
+    ports:
+      - 8080:8080
+volumes:
+  pgdata:
+    driver: local
