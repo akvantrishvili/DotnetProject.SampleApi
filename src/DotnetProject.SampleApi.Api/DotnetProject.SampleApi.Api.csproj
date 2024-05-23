@@ -2,12 +2,7 @@
 
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
-	</PropertyGroup>
-
-	<PropertyGroup Condition=" $(Configuration) == 'Release' ">
-		<OpenApiGenerateDocumentsOnBuild>true</OpenApiGenerateDocumentsOnBuild>
-		<RunLinter>true</RunLinter>
-		<FailOnLinterErrors>false</FailOnLinterErrors>
+	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -44,5 +39,20 @@
 	  <ProjectReference Include="..\DotnetProject.SampleApi.Infrastructure\DotnetProject.SampleApi.Infrastructure.csproj" />
 	  <ProjectReference Include="..\DotnetProject.SampleApi.PersistencePostgre\DotnetProject.SampleApi.PersistencePostgre.csproj" />
 	</ItemGroup>
+
+	<Target Name="CopyXmlFromPackagesOnBuild" BeforeTargets="Build">
+		<ItemGroup>
+			<DocumentationFiles Condition="Exists('$(OutDir)%(Filename).dll')" Include="%(Reference.RelativeDir)%(Reference.Filename).xml" />
+		</ItemGroup>
+		<Copy SourceFiles="@(DocumentationFiles)" DestinationFolder="$(OutDir)" Condition="Exists('%(RootDir)%(Directory)%(Filename)%(Extension)')" />
+	</Target>
+
+	<Target Name="CopyXmlFromPackagesOnPublish" BeforeTargets="Publish">
+		<ItemGroup>
+			<DocumentationFiles Condition="Exists('$(PublishDir)%(Filename).dll')" Include="%(Reference.RelativeDir)TBC.*.xml" />
+			<DocumentationFiles Condition="Exists('$(PublishDir)%(Filename).dll')" Include="%(Reference.RelativeDir)%(Reference.Filename).xml" />
+		</ItemGroup>
+		<Copy SourceFiles="@(DocumentationFiles)" DestinationFolder="$(PublishDir)" Condition="Exists('%(RootDir)%(Directory)%(Filename)%(Extension)')" />
+	</Target>
 
 </Project>
