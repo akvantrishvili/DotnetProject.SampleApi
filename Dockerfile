@@ -7,9 +7,11 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY . .
+ADD ./CA.cer /usr/local/share/ca-certificates/CA.crt
+RUN chmod 644 /usr/local/share/ca-certificates/CA.crt && update-ca-certificates && c_rehash
 RUN apt-get install -y curl
-RUN curl -vk http://api.nuget.org/v3/index.json
-RUN dotnet restore --configfile NuGet.Config
+RUN curl -v https://api.nuget.org/v3/index.json
+RUN dotnet restore
 COPY . .
 WORKDIR "/src/."
 RUN dotnet build -c $BUILD_CONFIGURATION -o /app/build
